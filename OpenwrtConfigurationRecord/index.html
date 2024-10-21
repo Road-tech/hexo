@@ -1,0 +1,221 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>OpenWrt配置记录 | Road's Blog</title><meta name="author" content="Road"><meta name="copyright" content="Road"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="本文记录Openwrt配置的全过程"><link rel="shortcut icon" href="/hexo/images/favicon.ico"><link rel="canonical" href="https://road-tech.github.io/hexo/OpenwrtConfigurationRecord/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//static.cloudflareinsights.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="manifest" href="/hexo/manifest.json"/><link rel="apple-touch-icon" sizes="180x180" href="/hexo/images/apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="/hexo/images/pwaicons/32.png"/><link rel="icon" type="image/png" sizes="16x16" href="/hexo/images/pwaicons/16.png"/><link rel="mask-icon" href="/hexo/images/safari-pinned-tab.svg" color="#5bbad5"/><link rel="stylesheet" href="/hexo/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?cadc3d1d9d8d4f5e1106193b542ce22c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script defer="defer" data-pjax="data-pjax" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;: &quot;c998d5b325f24855a5247e5800c8fe75&quot;}"></script><script>const GLOBAL_CONFIG = {
+  root: '/hexo/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'OpenWrt配置记录',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-01-06 00:00:00'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/font_3163941_d9m4tbyt6mg.css"><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/hexo/atom.xml" title="Road's Blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/hexo/images/100.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/hexo/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/hexo/tags/"><div class="headline">标签</div><div class="length-num">33</div></a><a href="/hexo/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/hexo/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/link/"><i class="fa-fw fab fa-apple"></i><span> Hackintosh</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(images/openwrt.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/hexo/"><span class="site-name">Road's Blog</span></a><a class="nav-page-title" href="/hexo/"><span class="site-name">OpenWrt配置记录</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/hexo/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/link/"><i class="fa-fw fab fa-apple"></i><span> Hackintosh</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">OpenWrt配置记录</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-01-04T16:00:00.000Z" title="发表于 2022-01-05 00:00:00">2022-01-05</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2022-01-05T16:00:00.000Z" title="更新于 2022-01-06 00:00:00">2022-01-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/hexo/categories/%E8%BD%AF%E4%BB%B6%E6%8A%80%E5%B7%A7/">软件技巧</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1.3k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>4分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>最近收了一台DIY属性拉满的迷你4G无线路由，出自大R杂货的MagicBox双频路由。大佬定制的主板，小巧的体积加上支持双频WiFi、LTE/4G网络、OpenWrt等属性，可以说极客感满满。</p>
+<p>不过大佬默认只提供原版纯净的固件，什么功能都没有，甚至主题都没有。虽然也没法集成太多的功能，但是后续想要更新版本就不方便了，还需要自己重新安装各种功能和配置各种参数。所以还是研究了下GitHub action和Openwrt，把自己需要功能和配置编辑好。后续openwrt只要更新了，GitHub便会自动帮我编译新固件。所以这篇文章就是记录各种配置的过程，方便日后的查询。</p>
+<p><img src="https://npm.elemecdn.com/road-blog-figure-webp@1.0.1/2021/12/29-11-14-55-IMG_2409.webp"></p>
+<h2 id="硬件配置："><a href="#硬件配置：" class="headerlink" title="硬件配置："></a>硬件配置：</h2><ul>
+<li><p>高通 QCA9531 550Mhz CPU + 9887 5G Wi-Fi 芯片</p>
+</li>
+<li><p>16M闪存 / 128M内存</p>
+</li>
+<li><p>433Mbps + 300Mbps 双频 Wi-Fi</p>
+</li>
+<li><p>USB 扩展口（ LTE 版两个 / Wi-Fi 版一个）</p>
+</li>
+<li><p>两个百兆网口（默认 1WAN 1LAN）</p>
+</li>
+<li><p>TF 卡槽（Wi-Fi 版无）</p>
+</li>
+<li><p>LTE 版为 Type-C 供电 / Wi-Fi 版为 Micro USB 供电。</p>
+</li>
+<li><p>4G LTE 版为下图3D打印的黑色尼龙外壳 / Wi-Fi 版为上图亚克力外壳</p>
+<p><img src="https://npm.elemecdn.com/road-blog-figure-webp@1.0.1/2021/12/29-11-14-45-IMG_2410.webp"></p>
+</li>
+</ul>
+<h2 id="Openwrt相关"><a href="#Openwrt相关" class="headerlink" title="Openwrt相关"></a>Openwrt相关</h2><h3 id="选择openwrt版本"><a href="#选择openwrt版本" class="headerlink" title="选择openwrt版本"></a>选择openwrt版本</h3><p>首先openwrt分为稳定版和开发版，目前稳定版的版本定在19.07，而开发版为20.XX。目前openwrt对9531的支持直到19.07稳定版，目前开发版是不支持的。</p>
+<p>然后openwrt也会有不同的分支，除了官方原版<a target="_blank" rel="noopener" href="https://github.com/openwrt/openwrt">openwrt</a>，还有<a target="_blank" rel="noopener" href="https://github.com/coolsnowwolf">coolsnowwolf</a>大佬的<a target="_blank" rel="noopener" href="https://github.com/coolsnowwolf/lede">LEDE</a>、<a target="_blank" rel="noopener" href="https://github.com/Lienol">Lienol</a>大佬的<a target="_blank" rel="noopener" href="https://github.com/Lienol/openwrt">openwrt</a>。</p>
+<p>我很浅略的对比了三个版本的代码，LEDE和Lienol的openwrt会针对我们的使用习惯进行优化，比如默认生成Wi-Fi的ssid名称，会区分2.4G和5G。同时会集成更多的功能，让我们的编译更加方便，不用一个个的去寻找添加，而且自带的源也能保证与系统稳定运行。当然估计还有一些性能上的优化，这方面我就看不出来了。</p>
+<p>因为AR9531目前只能支持19.07，所以在编译的时候需要留意选择正确的版本，官方原版的openwrt和Lienol大的不同版本是在GitHub上的不同分支，而coolsnowwolf大佬的不同版本是不同的库，这里是要留意的。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/coolsnowwolf">coolsnowwolf</a>大佬的lede不同版本的库:</p>
+<ul>
+<li><p>稳定版   <a target="_blank" rel="noopener" href="https://github.com/coolsnowwolf/openwrt">https://github.com/coolsnowwolf/openwrt</a></p>
+</li>
+<li><p>开发版   <a target="_blank" rel="noopener" href="https://github.com/coolsnowwolf/lede">https://github.com/coolsnowwolf/lede</a></p>
+</li>
+</ul>
+<h3 id="生成编译配置"><a href="#生成编译配置" class="headerlink" title="生成编译配置"></a>生成编译配置</h3><p>这一步目前没有其他方法，还是需要自行搭建一个ubuntu平台，拉取整个openwrt的库再进行<code>make menuconfig</code> 操作生成编译配置。不过好在这个配置确定后，后续不需要修改了。所以也就麻烦这一次。</p>
+<h4 id="集成LTE所需驱动"><a href="#集成LTE所需驱动" class="headerlink" title="集成LTE所需驱动"></a>集成LTE所需驱动</h4><p>依照老板大R的要求，驱动LTE所需的3个驱动，分别是：</p>
+<p>kmod-usb-net</p>
+<p>kmod-usb-net -&gt; kmod-usb-net-rndis</p>
+<p>usb-modeswitch</p>
+<h4 id="添加所需的功能"><a href="#添加所需的功能" class="headerlink" title="添加所需的功能"></a>添加所需的功能</h4><p>这里可以按需添加，功能主要都集成在Luci下。Lede和Lienol的版本集成的功能会明显更多更方便。  </p>
+<p>需要注意的是，添加功能后要注意固件的大小，不要让最终的固件大于16M导致编译失败。同时如果出现功能太多需要调整配置，我强烈建议先删除默认的.config文件重新配置。因为你选择一个功能时，可能会自动选择所需的各种以来，而你只是单纯的取消这个功能，相关的依赖并不会联同取消，这样很有可能会出现你明明取消了这个功能，但是固件并没有减少，因为相关的大量依赖还是被编译进去了。  </p>
+<p>下面记录一些相关的命令：</p>
+<ol>
+<li><p>添加luci-theme-argon主题</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd openwrt/package</span><br><span class="line">git clone https://github.com/jerrykuku/luci-theme-argon.git #拉取主题 </span><br><span class="line">sed -i &#x27;s/luci-theme-bootstrap/luci-theme-argon/g&#x27; feeds/luci/collections/luci/Makefile #修改默认的主题</span><br><span class="line">make menuconfig #选择 LUCI-&gt;Theme-&gt;Luci-theme-argon  </span><br></pre></td></tr></table></figure>
+</li>
+<li><p>中文支持</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">make menuconfig #选择LuCI-&gt;Modules-&gt;Translations-&gt;Chinese</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h4 id="修改默认的设定"><a href="#修改默认的设定" class="headerlink" title="修改默认的设定"></a>修改默认的设定</h4><ol>
+<li><p>默认开启wifi </p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sed -i &#x27;s/disabled=1/disabled=0/g&#x27; package/kernel/mac80211/files/lib/wifi/mac80211.sh</span><br><span class="line">sed -i &#x27;s/OpenWrt/Road-MagicBox/g&#x27; package/kernel/mac80211/files/lib/wifi/mac80211.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改路由默认ip</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sed -i &#x27;s/192.168.1.1/192.168.8.1/g&#x27; package/base-files/files/bin/config_generate</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">把lan口默认ip由192.168.1.1改成192.168.8.1</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>添加wwan接口</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sed -i &#x27;$d&#x27; package/base-files/files/bin/config_generate</span><br><span class="line">sed -i &#x27;$a uci set network.wwan=interface&#x27; package/base-files/files/bin/config_generate</span><br><span class="line">sed -i &#x27;$a uci set network.wwan.ifname=eth2&#x27; package/base-files/files/bin/config_generate</span><br><span class="line">sed -i &#x27;$a uci set network.wwan.proto=dhcp&#x27; package/base-files/files/bin/config_generate</span><br><span class="line">sed -i &#x27;$a uci set network.wwan.up=1&#x27; package/base-files/files/bin/config_generate</span><br><span class="line">sed -i &#x27;$a uci commit&#x27; package/base-files/files/bin/config_generate</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>wwan接口添加防火墙</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sed -i &quot;19a \ \ \ \ \ \ \ \ list   network          &#x27;wwan&#x27; &quot; package/network/config/firewall/files/firewall.config</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改主机名</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sed -i &#x27;s/OpenWrt/MagicBox/g&#x27; package/base-files/files/bin/config_generate</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>设定root密码为password</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">sed -i &#x27;1d&#x27; package/base-files/files/etc/shadow</span><br><span class="line">sed -i &#x27;1i root:$1$H\/ab6bvd$yWkIzUrKuLPTNHY9akBDC0:18988:0:99999:7:::&#x27;  package/base-files/files/etc/shadow</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="Github-action相关"><a href="#Github-action相关" class="headerlink" title="Github action相关"></a>Github action相关</h2><p>自动编译脚本源自<a target="_blank" rel="noopener" href="https://github.com/P3TERX">P3TERX</a>/<a target="_blank" rel="noopener" href="https://github.com/P3TERX/Actions-OpenWrt">Actions-OpenWrt</a>，脚本使用说明：<a target="_blank" rel="noopener" href="https://github.com/P3TERX/Actions-OpenWrt">English</a> | <a target="_blank" rel="noopener" href="https://p3terx.com/archives/build-openwrt-with-github-actions.html">中文</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://road-tech.github.io/hexo">Road</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://road-tech.github.io/hexo/OpenwrtConfigurationRecord/">https://road-tech.github.io/hexo/OpenwrtConfigurationRecord/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://road-tech.github.io/hexo" target="_blank">Road's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/hexo/tags/%E9%85%8D%E7%BD%AE%E8%AE%B0%E5%BD%95/">配置记录</a><a class="post-meta__tags" href="/hexo/tags/OpenWrt/">OpenWrt</a></div><div class="post-share"><div class="social-share" data-image="/hexo/images/openwrt.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/hexo/Hackintosh_LenovoM910X_8100B_RX460_OC/" title="1L小主机系列 - Lenovo M910X"><img class="cover" src="/hexo/images/lenovo-thinkCentre-M910x-tiny-hero.webp" onerror="onerror=null;src='/hexo/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">1L小主机系列 - Lenovo M910X</div></div><div class="info-2"><div class="info-item-1">省流助手，EFI下载链接： https://github.com/Road-tech/Hackintosh_LenovoM910X_8100B_RX460_OC 关于M910X联想的M910X（p320 tiny），一个非常好玩的1L迷你小主机。Q270的主板，双M.2插槽、一个PCIe扩展槽、双通道ddr4、6个USB，同时是最后一代可以刷bios上魔改U的联想小主机。再往上的M920x，P340都是双BIOS设计，无法刷bios了，也基本告别了便宜好玩的ES版CPU或者魔改U。 现在这台小主机性价比非常高，700出头的价格就买到这样的强悍扩展性，放在这个价位简直无敌的存在，而且可玩性非常高。这个价格换成300系芯片组的小主机，基本都没有双M.2接口（除了dell 7080mff...</div></div></div></a><a class="pagination-related" href="/hexo/ThinItxCaseMK1/" title="复刻！赵总MK1，一个3D打印版的Thin-ITX机箱"><img class="cover" src="/hexo/images/MK1VS.webp" onerror="onerror=null;src='/hexo/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">复刻！赵总MK1，一个3D打印版的Thin-ITX机箱</div></div><div class="info-2"><div class="info-item-1">前言      许久前在CHH看到赵总设计的这款机箱后（链接在此），就深深中毒了。奈何这片文章发表与2015年，且据闻这个机箱的产量极少，意味着想拥有一台几乎不可能了。       去年diy了一台Mac mini，同样都是使用的Thin itx主板，虽然千辛万苦等到了成品套件，但是对于套件的散热能力并不满意。也尝试了几种方案，包括魔改下压式散热、优化风道版的尼米兹散热、加大散热鳍片的面积，最终的效果也还是不太满意。毕竟受限于风扇的尺寸，再怎么优化，没有足够的风量带走热量，这台diy的Mac mini永远是个小闷罐。  ​      另外市面上售卖的thin itx机箱，几乎都是洞洞流，再搭配超薄的下压式散热。丑爆之余，散热功率也就那样。        So，在此想起赵总的这款MK1，4个风扇，气流覆盖整个主板。垂直风道，烟囱效应，热空气自然的往上走，享受物理学加成，理论上风扇转速不用很高可以换来不错的效果。而且这样的散热方式，可以很快乐的使用侧透面板，告别洞洞流机箱。       之前折腾Mac...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/hexo/JekyllConfigurationRecord/" title="Jekyll配置记录"><img class="cover" src="/hexo/images/jekyll.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2021-03-03</div><div class="info-item-2">Jekyll配置记录</div></div><div class="info-2"><div class="info-item-1">本文旨在记录Jekyll配置的全过程 环境配置要求环境 NodeJS   Ruby (2.4.0或者更高)   RubyGems      安装过程安装NodeJS首先安装 NodeJS ，由于NodeJS版本较多，考虑到版本切换和配置复杂，这里先安装NodeJS版本管理器NVM。  下载并运行脚本： curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash  添加环境： export NVM_DIR=&quot;$([ -z &quot;$&#123;XDG_CONFIG_HOME-&#125;&quot; ] &amp;&amp; printf %s &quot;$&#123;HOME&#125;/.nvm&quot; || printf %s &quot;$&#123;XDG_CONFIG_HOME&#125;/nvm&quot;)&quot;[ -s &quot;$NVM_DIR/nvm.sh&quot; ] &amp;&amp; \....</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/hexo/images/100.png" onerror="this.onerror=null;this.src='/hexo/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Road</div><div class="author-info-description">生活日常：好物、装机、diy、黑苹果、mini主机 | 这里是 @大马路叫Road 的个人博客，与你一起发现更大的世界</div><div class="site-data"><a href="/hexo/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/hexo/tags/"><div class="headline">标签</div><div class="length-num">33</div></a><a href="/hexo/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Road-tech"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Road-tech" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://www.zhihu.com/people/ma-lu-58" target="_blank" title="Zhihu"><i class="fa-brands fa-zhihu"></i></a><a class="social-icon" href="http://weibo.com/superlulula" target="_blank" title="weibo"><i class="fab fa-weibo"></i></a><a class="social-icon" href="https://www.facebook.com/malu.tech" target="_blank" title="Facebook"><i class="fab fa-facebook-square"></i></a><a class="social-icon" href="https://www.linkedin.com/in/路-马-8ab580116" target="_blank" title="linkedin"><i class="fab fa-linkedin"></i></a><a class="social-icon" href="mailto:496814664@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站施工中</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A1%AC%E4%BB%B6%E9%85%8D%E7%BD%AE%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">硬件配置：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Openwrt%E7%9B%B8%E5%85%B3"><span class="toc-number">2.</span> <span class="toc-text">Openwrt相关</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E6%8B%A9openwrt%E7%89%88%E6%9C%AC"><span class="toc-number">2.1.</span> <span class="toc-text">选择openwrt版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E7%BC%96%E8%AF%91%E9%85%8D%E7%BD%AE"><span class="toc-number">2.2.</span> <span class="toc-text">生成编译配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%9B%86%E6%88%90LTE%E6%89%80%E9%9C%80%E9%A9%B1%E5%8A%A8"><span class="toc-number">2.2.1.</span> <span class="toc-text">集成LTE所需驱动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E6%89%80%E9%9C%80%E7%9A%84%E5%8A%9F%E8%83%BD"><span class="toc-number">2.2.2.</span> <span class="toc-text">添加所需的功能</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E7%9A%84%E8%AE%BE%E5%AE%9A"><span class="toc-number">2.2.3.</span> <span class="toc-text">修改默认的设定</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Github-action%E7%9B%B8%E5%85%B3"><span class="toc-number">3.</span> <span class="toc-text">Github action相关</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/hexo/Hackintosh_LenovoM910X_8100B_RX460_OC/" title="1L小主机系列 - Lenovo M910X"><img src="/hexo/images/lenovo-thinkCentre-M910x-tiny-hero.webp" onerror="this.onerror=null;this.src='/hexo/img/404.jpg'" alt="1L小主机系列 - Lenovo M910X"/></a><div class="content"><a class="title" href="/hexo/Hackintosh_LenovoM910X_8100B_RX460_OC/" title="1L小主机系列 - Lenovo M910X">1L小主机系列 - Lenovo M910X</a><time datetime="2022-01-23T16:00:00.000Z" title="发表于 2022-01-24 00:00:00">2022-01-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/hexo/OpenwrtConfigurationRecord/" title="OpenWrt配置记录"><img src="/hexo/images/openwrt.webp" onerror="this.onerror=null;this.src='/hexo/img/404.jpg'" alt="OpenWrt配置记录"/></a><div class="content"><a class="title" href="/hexo/OpenwrtConfigurationRecord/" title="OpenWrt配置记录">OpenWrt配置记录</a><time datetime="2022-01-04T16:00:00.000Z" title="发表于 2022-01-05 00:00:00">2022-01-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/hexo/ThinItxCaseMK1/" title="复刻！赵总MK1，一个3D打印版的Thin-ITX机箱"><img src="/hexo/images/MK1VS.webp" onerror="this.onerror=null;this.src='/hexo/img/404.jpg'" alt="复刻！赵总MK1，一个3D打印版的Thin-ITX机箱"/></a><div class="content"><a class="title" href="/hexo/ThinItxCaseMK1/" title="复刻！赵总MK1，一个3D打印版的Thin-ITX机箱">复刻！赵总MK1，一个3D打印版的Thin-ITX机箱</a><time datetime="2021-12-15T16:00:00.000Z" title="发表于 2021-12-16 00:00:00">2021-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/hexo/Hackintosh_HP-800G1_I7-4770hq_OC/" title="1L小主机系列 - HP 800G1"><img src="/hexo/images/hp_800_g1.webp" onerror="this.onerror=null;this.src='/hexo/img/404.jpg'" alt="1L小主机系列 - HP 800G1"/></a><div class="content"><a class="title" href="/hexo/Hackintosh_HP-800G1_I7-4770hq_OC/" title="1L小主机系列 - HP 800G1">1L小主机系列 - HP 800G1</a><time datetime="2021-04-19T16:00:00.000Z" title="发表于 2021-04-20 00:00:00">2021-04-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/hexo/Hackintosh-AsusH110T-QNVH-I7-8850H-DW1820A-OC/" title="DIY Mac mini后续 - CPU更换至QNVH"><img src="/hexo/images/diy-mac-mini.webp" onerror="this.onerror=null;this.src='/hexo/img/404.jpg'" alt="DIY Mac mini后续 - CPU更换至QNVH"/></a><div class="content"><a class="title" href="/hexo/Hackintosh-AsusH110T-QNVH-I7-8850H-DW1820A-OC/" title="DIY Mac mini后续 - CPU更换至QNVH">DIY Mac mini后续 - CPU更换至QNVH</a><time datetime="2021-04-18T16:00:00.000Z" title="发表于 2021-04-19 00:00:00">2021-04-19</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Road</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="icp"><a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn/"><span>粤ICP备2021171477号</span></a><span class="footer-separator">|</span><a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44011202001879"><img class="icp-icon" src="https://s1.ax1x.com/2018/09/29/ilmwIH.png"/><span>粤公网安备44011202001879号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/hexo/js/utils.js"></script><script src="/hexo/js/main.js"></script><script src="/hexo/js/tw_cn.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
