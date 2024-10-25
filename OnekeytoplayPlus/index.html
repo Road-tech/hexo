@@ -1,0 +1,218 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>懒人升级！自动判断上下班+导航+放歌 | Road's Blog</title><meta name="author" content="Road"><meta name="copyright" content="Road"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="之前已经写了一篇文章，介绍了如何设置上下班一键导航+放歌。配合NFC标签，可以做到一碰就开始导航，没有多余的操作了。 但是还是觉得不完美，毕竟上下班还是要单独点选一下；用NFC标签的话还要准备两张，还是不够懒人。..."><link rel="shortcut icon" href="/hexo/images/favicon.ico"><link rel="canonical" href="https://road-tech.github.io/hexo/OnekeytoplayPlus/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//static.cloudflareinsights.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="manifest" href="/hexo/manifest.json"/><link rel="apple-touch-icon" sizes="180x180" href="/hexo/images/apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="/hexo/images/pwaicons/32.png"/><link rel="icon" type="image/png" sizes="16x16" href="/hexo/images/pwaicons/16.png"/><link rel="mask-icon" href="/hexo/images/safari-pinned-tab.svg" color="#5bbad5"/><link rel="stylesheet" href="/hexo/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?cadc3d1d9d8d4f5e1106193b542ce22c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script defer="defer" data-pjax="data-pjax" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;: &quot;c998d5b325f24855a5247e5800c8fe75&quot;}"></script><script>const GLOBAL_CONFIG = {
+  root: '/hexo/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '懒人升级！自动判断上下班+导航+放歌',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2020-12-21 00:00:00'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/font_3163941_d9m4tbyt6mg.css"><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/hexo/atom.xml" title="Road's Blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/hexo/images/100.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/hexo/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/hexo/tags/"><div class="headline">标签</div><div class="length-num">33</div></a><a href="/hexo/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/hexo/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/link/"><i class="fa-fw fab fa-apple"></i><span> Hackintosh</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(images/iOSOneButtonNavigation&amp;play-05.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/hexo/"><span class="site-name">Road's Blog</span></a><a class="nav-page-title" href="/hexo/"><span class="site-name">懒人升级！自动判断上下班+导航+放歌</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/hexo/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/link/"><i class="fa-fw fab fa-apple"></i><span> Hackintosh</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">懒人升级！自动判断上下班+导航+放歌</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-12-19T16:00:00.000Z" title="发表于 2020-12-20 00:00:00">2020-12-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2020-12-20T16:00:00.000Z" title="更新于 2020-12-21 00:00:00">2020-12-21</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/hexo/categories/%E8%BD%AF%E4%BB%B6%E6%8A%80%E5%B7%A7/">软件技巧</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="小声明"><a href="#小声明" class="headerlink" title="小声明"></a>小声明</h2><p>这依旧是个很简单的小教程，初衷只是为了方便生活。<br>So，如果你已经是捷径（快捷指令）大神，勿喷！<br>如有，也感谢大家提改进建议给我。</p>
+<h2 id="Q-amp-A"><a href="#Q-amp-A" class="headerlink" title="Q&amp;A"></a>Q&amp;A</h2><p>Q：为什么你每天上下班还要导航？<br>A：我上下班每日通勤平均时间40min，不同的路径，不同的城市道路+高速组合，拥堵的时候差距可以多达20min。所以目前我很依赖导航。</p>
+<p>Q：还是XX手机的XX助手更方便，轻轻松松就设置好了。<br>A：本文仅适用于iOS手机。</p>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>之前已经写了一篇文章，介绍了如何设置上下班一键导航+放歌。配合NFC标签，可以做到一碰就开始导航，没有多余的操作了。</p>
+<p>但是还是觉得不完美，毕竟上下班还是要单独点选一下；用NFC标签的话还要准备两张，还是不够懒人。</p>
+<p>所以我们再优化一下，加入工作日和时间判断，再配合判断蓝牙或者Carplay的连接状态，做到点选都不用、更加懒人的效果。</p>
+<h2 id="总体思路"><a href="#总体思路" class="headerlink" title="总体思路"></a>总体思路</h2><p>大致的思路or流程如图：</p>
+<p><img src="https://npm.elemecdn.com/road-blog-figure-webp@1.0.1/ShortcutGen2/ShortcutGen2-1.webp" alt="image"></p>
+<p>iOS的<strong>快捷指令</strong>里拥有一栏叫自动化，为我们预设了各种触发指令的场景。我会选择用<strong>连接CarPlay车载时</strong>或者<strong>蓝牙</strong>的触发场景。当手机自动连上车上的CarPlay或者中控的蓝牙时，去触发设定好的指令。</p>
+<p>触发指令后，指令会去播放音乐，然后会去判断今日日期，如果是周末就退出。如果是工作日，就去判断是上班还是回家。</p>
+<p>判断上班还是回家的方法有很多种，可以用判断回家的距离或者时常大于或者小于某些值来区分，也可以用判断当前时间是早上还是下午来区分。这里我选择相对简单的用时间判断上下午。</p>
+<p>当判断出上班还是回家后，再跳转触发上篇文章教大家设定好的一键导航就好了。</p>
+<h2 id="设置捷径指令"><a href="#设置捷径指令" class="headerlink" title="设置捷径指令"></a>设置捷径指令</h2><p>因为iOS的快捷指令的设置界面的逻辑其实并不清晰，所以我不打算将一整套流程都设置在一个快捷指令里，而是选用套娃的方式，某一条件判断好了，就跳到下一个对应的快捷指令中。</p>
+<p>PS. 就是我们编程时写function的逻辑 - -｜</p>
+<h3 id="设定一键导航"><a href="#设定一键导航" class="headerlink" title="设定一键导航"></a>设定一键导航</h3><p>这里就不重复了，有劳大家去上一篇文章去查看。</p>
+<p>上一篇文章的链接：<a target="_blank" rel="noopener" href="https://post.smzdm.com/p/ammq20rv/">iOS设置下班一键导航+放歌</a></p>
+<p>这里我会创建两个一键导航的快捷指令，分别叫“上班”，“回家”。</p>
+<h3 id="判断上班还是回家"><a href="#判断上班还是回家" class="headerlink" title="判断上班还是回家"></a>判断上班还是回家</h3><p>也就是整个流程的这一部分：<br><img src="https://npm.elemecdn.com/road-blog-figure-webp@1.0.1/ShortcutGen2/ShortcutGen2-2.webp" alt="image"></p>
+<p>这里我选择相对简单的用时间判断上下午。</p>
+<p>因为快捷指令并没有提供现成的判断上下午的指令，所以换个思路，利用快捷指令的<strong>格式化</strong>功能。 将时间转为纯数字格式再比较数值大小，如将时间11:30转为纯数字的1130，然后比较数字大小；数字小于1200即为上午，大于1200即为下午。</p>
+<p>查看Apple官方的快捷指令使用手册，找到关于<a target="_blank" rel="noopener" href="https://support.apple.com/zh-cn/guide/shortcuts/apd8d9b19184/4.0/ios/14.0">自定日期格式</a>的内容，可以看到快捷指令采用了<a target="_blank" rel="noopener" href="https://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns">Unicode Technical Standard #35</a>的格式标准。</p>
+<p>|———————————–+—————————————|<br>|              模式                  |                 结果                     |<br>|:——————————:    |:————————————:    |<br>| yyyy.MM.dd G ‘at’ HH:mm:ss zzz     | 1996.07.10 AD at 15:08:56 PDT            |<br>| EEE, MMM d, ‘’yy                   | Wed, July 10, ‘96                        |<br>| h:mm a                             | 12:08 PM                                 |<br>| hh ‘o’’clock’ a, zzzz              | 12 o’clock PM, Pacific Daylight Time     |<br>| K:mm a, z                          | 0:00 PM, PST                             |<br>|———————————–+—————————————|</p>
+<p>其中我们关注的小时就是字母H<br>HH代表的是24小时制的小时，hh代表的是12小时制的小时<br>mm代表的是分钟，个位数的时候补零。m则不补零。</p>
+<p>这一部分的捷径可以设置为</p>
+<p><img src="https://npm.elemecdn.com/road-blog-figure-webp@1.0.1/ShortcutGen2/ShortcutGen2-3.webp" alt="image"></p>
+<p>具体流程就是：</p>
+<p>获取当前时间-&gt; 时间格式转为自定格式、HHmm-&gt; 用转换后的数字-1130-&gt; 条件判断、计算结果小于0则为上午，大于0则为下午-&gt; 跳转到对应的快捷指令“上班”or“下班”</p>
+<p>1130对应就是11点30分，这个判断时间可以按照你的需求自己设定。</p>
+<p>设定<strong>如果</strong>这个脚本的时候，判断条件可能无法设定为<strong>小于</strong>，而是只能设定为包含、有任何值等条件。需要将<strong>计算的结果</strong>从文本改变为数字，就可以设定为大于or小于了。</p>
+<p><img src="https://npm.elemecdn.com/road-blog-figure-webp@1.0.1/ShortcutGen2/ShortcutGen2-4.webp" alt="image"></p>
+<h3 id="判断工作日"><a href="#判断工作日" class="headerlink" title="判断工作日"></a>判断工作日</h3><p>也就是整个流程的这一部分：<br><img src="https://npm.elemecdn.com/road-blog-figure-webp@1.0.1/ShortcutGen2/ShortcutGen2-5.webp" alt="image"></p>
+<p>依旧是利用快捷指令的<strong>格式化</strong>功能。 将周几格式转为纯数字格式再比较数值区间，如将周二转为纯数字的2，然后比较得出2在范围1-5之间，则为工作日；否则即为周末。</p>
+<p>查看<a target="_blank" rel="noopener" href="https://unicode.org/reports/tr35/tr35-dates.html#Date_Format_Patterns">Unicode Technical Standard #35</a>的格式标准，星期的定义为：</p>
+<p>|——    |——————    |———-    |——————————    |<br>| Sym.     | Field Patterns     | Examples     | Description                      |<br>|——    |—————-    |———-    |——————————    |<br>| E        | E..EEE             | Tue          | Abbreviated                      |<br>| 　       | EEEE               | Tuesday      | Wide                             |<br>| 　       | EEEEE              | T            | Narrow                           |<br>| 　       | EEEEEE             | Tu           | Short                            |<br>| e        | e                  | 2            | Numeric: 1 digit                 |<br>| 　       | ee                 | 2            | Numeric: 2 digits + zero pad     |<br>| 　       | eee                | Tue          | Abbreviated                      |<br>| 　       | eeee               | Tuesday      | Wide                             |<br>| 　       | eeeee              | T            | Narrow                           |<br>| 　       | eeeeee             | Tu           | Short                            |<br>| c        | c..cc              | 2            | Numeric: 1 digit                 |<br>| 　       | ccc                | Tue          | Abbreviated                      |<br>| 　       | cccc               | Tuesday      | Wide                             |<br>| 　       | ccccc              | T            | Narrow                           |<br>| 　       | cccccc             | Tu           | Short                            |<br>|——    |——————    |———-    |——————————    |</p>
+<p>我们需要的就是<code>e</code>，即星期二输出<code>2</code>.</p>
+<p>测试一下：<br><img src="https://npm.elemecdn.com/road-blog-figure-webp@1.0.1/ShortcutGen2/ShortcutGen2-6.webp" alt="image"></p>
+<p>可以看到虽然是星期一，但是输出的数字居然是2。这里应该是根据手机的地区设置，一周的开始是周日，所以周一到周五的数字范围就是2-6。大家要依据自己的实际情况做调整。</p>
+<p>这一部分的捷径可以设置为</p>
+<p><img src="https://npm.elemecdn.com/road-blog-figure-webp@1.0.1/ShortcutGen2/ShortcutGen2-7.webp" alt="image"></p>
+<p>具体流程就是：</p>
+<p>获取当前时间-&gt; 时间格式转为自定格式、e-&gt; 数字大于等于2，是下一步，否则提示今天不上班-&gt; 数字小于等于6，是下一步，否则提示今天不上班-&gt; 跳转到对应的快捷指令“判断上下班”。</p>
+<p>依旧要注意设定<strong>如果</strong>这个脚本的时候，需要将<strong>计算的结果</strong>从文本改变为数字，才可以设定为大于or小于。</p>
+<h3 id="设定自动化场景"><a href="#设定自动化场景" class="headerlink" title="设定自动化场景"></a>设定自动化场景</h3><p>如图：</p>
+<p><img src="https://npm.elemecdn.com/road-blog-figure-webp@1.0.1/ShortcutGen2/ShortcutGen2-8.webp" alt="image"><br><img src="https://npm.elemecdn.com/road-blog-figure-webp@1.0.1/ShortcutGen2/ShortcutGen2-9.webp" alt="image"></p>
+<p>具体流程就是：</p>
+<p>手机连接到CarPlay-&gt; 播放网易云-&gt; 判断工作日</p>
+<h3 id="附加内容"><a href="#附加内容" class="headerlink" title="附加内容"></a>附加内容</h3><p>其实目前为止的自动化场景也足够满足大多数情况了，但是如果小伙伴们有更高的要求，希望连法定节假日和补班也算上，那就继续看下面的附加内容吧。</p>
+<p>为什么判断法定节假日和补班是附加内容呢？因为法定节假日和补班每年都不一样，这就需要每年至少要更新一次放假安排。为了方便–懒–，这个时候我们就要去依托别人的服务。这个时候就会有不稳定的因素产生了，别人提供的服务，或者因为网络因素，或者服务器的承受能力，或者经济原因。很有可能突然就因为各种原因就失效了，然后影响我们的捷径自动化判断。</p>
+<p>当然，在了解完上述这些不稳定因素，你仍然认为这是可以接受并且想要更完善的体验，我推荐你几个思路：</p>
+<ol>
+<li>直接调用别人的节假日判断的API接口，如<code>http://timor.tech/api/holiday/info/2018-3-2</code> 具体API内容内容可以<a target="_blank" rel="noopener" href="https://timor.tech/api/holiday/">参考这里</a>。这个方法优点是简单，直接传递日期过去，传回的信息连星期几，是否节假日都有了。缺点是开发者用爱发电，服务容易遭受攻击导致不稳定。</li>
+<li>直接下载别人维护好，放在公共平台的假日列表，如gameboyLV的<a target="_blank" rel="noopener" href="https://github.com/gameboyLV/ChineseHoliday/commits/master">ChineseHoliday项目</a>。优点是服务器相对稳定（文件存放在GitHub并且可以配合CDN保证网络访问质量），缺点是大佬可能哪年就不更新了。不过我看大佬从16年开始一直有更新到21年，还是很稳定的。实在不行我们可以fork过来自己更新嘛。</li>
+<li>订阅公共日历，也就是别人维护的法定假期的公共日历。如<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/136669675">这个地址</a>内提供的订阅日历，大家也可以自己找。优点依旧是服务器相对稳定（日历依托在iCloud），缺点依然是可能哪年就不更新了。</li>
+</ol>
+<p>加入节假日和补班日的判断后的大致的思路or流程如图：<br><img src="https://npm.elemecdn.com/road-blog-figure-webp@1.0.1/ShortcutGen2/ShortcutGen2-10.webp" alt="image"></p>
+<p>我这里演示方法二。</p>
+<p>我先fork了的gameboyLV项目，然后release发布了一个1.0版方便蹭免费的CDN加速。</p>
+<p>然后公众假日的链接为</p>
+<p><code>https://cdn.jsdelivr.net/gh/Road-tech/ChineseHoliday@1.0/data/XXXX.txt</code></p>
+<p>补假的链接为</p>
+<p><code>https://cdn.jsdelivr.net/gh/Road-tech/ChineseHoliday@1.0/data/XXXX_w.txt</code></p>
+<p>链接里<code>XXXX</code>代表当前年份。</p>
+<p>举个例子关于节假日判断，也就是这部分：</p>
+<p><img src="https://npm.elemecdn.com/road-blog-figure-webp@1.0.1/ShortcutGen2/ShortcutGen2-11.webp" alt="image"></p>
+<p>这一部分的捷径可以设置为</p>
+<p><img src="https://npm.elemecdn.com/road-blog-figure-webp@1.0.1/ShortcutGen2/ShortcutGen2-12.webp" alt="image"></p>
+<p>判断打定工作日的具体流程就是：</p>
+<p>获取当前日期-&gt; 日期格式转为两个格式化后的日期，MMdd和yyyy-&gt; 设定URL<code>https://c...1.0/data/[格式化后的日期yyyy].txt</code>-&gt; 获取URL内容-&gt; 如果URL内容里有[格式化后的日期MMdd]，也就是当前日期-&gt; 如果URL内容里含有当前日期就放假，否则上班</p>
+<p>判断补假的流程类似，只是要将URL换成<code>https://c...1.0/data/[格式化后的日期yyyy]_w.txt</code></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://road-tech.github.io/hexo">Road</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://road-tech.github.io/hexo/OnekeytoplayPlus/">https://road-tech.github.io/hexo/OnekeytoplayPlus/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://road-tech.github.io/hexo" target="_blank">Road's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/hexo/tags/%E6%8D%B7%E5%BE%84/">捷径</a><a class="post-meta__tags" href="/hexo/tags/%E5%BF%AB%E6%8D%B7%E6%8C%87%E4%BB%A4/">快捷指令</a><a class="post-meta__tags" href="/hexo/tags/%E4%B8%80%E9%94%AE%E5%AF%BC%E8%88%AA/">一键导航</a><a class="post-meta__tags" href="/hexo/tags/CarPlay/">CarPlay</a></div><div class="post-share"><div class="social-share" data-image="/hexo/images/iOSOneButtonNavigation&amp;play-05.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/hexo/JekyllConfigurationRecord/" title="Jekyll配置记录"><img class="cover" src="/hexo/images/jekyll.webp" onerror="onerror=null;src='/hexo/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Jekyll配置记录</div></div><div class="info-2"><div class="info-item-1">本文旨在记录Jekyll配置的全过程 环境配置要求环境 NodeJS   Ruby (2.4.0或者更高)   RubyGems      安装过程安装NodeJS首先安装 NodeJS ，由于NodeJS版本较多，考虑到版本切换和配置复杂，这里先安装NodeJS版本管理器NVM。  下载并运行脚本： curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash  添加环境： export NVM_DIR=&quot;$([ -z &quot;$&#123;XDG_CONFIG_HOME-&#125;&quot; ] &amp;&amp; printf %s &quot;$&#123;HOME&#125;/.nvm&quot; || printf %s &quot;$&#123;XDG_CONFIG_HOME&#125;/nvm&quot;)&quot;[ -s &quot;$NVM_DIR/nvm.sh&quot; ] &amp;&amp; \....</div></div></div></a><a class="pagination-related" href="/hexo/hello-world/" title="Hello World"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Hello World</div></div><div class="info-2"><div class="info-item-1">Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post$ hexo new &quot;My New Post&quot;  More info: Writing Run server$ hexo server  More info: Server Generate static files$ hexo generate  More info: Generating Deploy to remote sites$ hexo deploy  More info: Deployment </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/hexo/Onekeytoplay/" title="iOS设置下班一键导航+放歌"><img class="cover" src="/hexo/images/iOSOneButtonNavigation&play-05.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2020-12-01</div><div class="info-item-2">iOS设置下班一键导航+放歌</div></div><div class="info-2"><div class="info-item-1">小声明这只是个很简单的小教程，初衷只是为了方便生活。So，如果你已经是捷径（快捷指令）大神，轻喷。如果能顺便提点改进建议给我就更好了。 使用场景在成为一枚社畜之后，每天必备的操作就是：  上车 -&gt; 打开高德地图导航 -&gt; 打开网易云放歌 -&gt; 家or公司     虽然用时不久，但是上班归家心切，必定是操作步骤越少越好。所以就用上iOS的捷径（快捷指令）。 设置捷径指令网易云 首先你需要在网易云音乐的设置里添加Siri捷径    这样你才能能在快捷指令里找到有关网易云音乐的指令。   获取高德地图跳转接口我们去到高德地图的高德开放平台，去查看iOS的URL调用说明。  然后我们能得到一个URL的范例：     iosamap://navi?sourceApplication=applicationName&amp;poiname=fangheng &amp;poiid=BGVIS&amp;lat=36.547901...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/hexo/images/100.png" onerror="this.onerror=null;this.src='/hexo/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Road</div><div class="author-info-description">生活日常：好物、装机、diy、黑苹果、mini主机 | 这里是 @大马路叫Road 的个人博客，与你一起发现更大的世界</div><div class="site-data"><a href="/hexo/archives/"><div class="headline">文章</div><div class="length-num">13</div></a><a href="/hexo/tags/"><div class="headline">标签</div><div class="length-num">33</div></a><a href="/hexo/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Road-tech"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Road-tech" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://www.zhihu.com/people/ma-lu-58" target="_blank" title="Zhihu"><i class="fa-brands fa-zhihu"></i></a><a class="social-icon" href="http://weibo.com/superlulula" target="_blank" title="weibo"><i class="fab fa-weibo"></i></a><a class="social-icon" href="https://www.facebook.com/malu.tech" target="_blank" title="Facebook"><i class="fab fa-facebook-square"></i></a><a class="social-icon" href="https://www.linkedin.com/in/路-马-8ab580116" target="_blank" title="linkedin"><i class="fab fa-linkedin"></i></a><a class="social-icon" href="mailto:496814664@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站施工中</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E5%A3%B0%E6%98%8E"><span class="toc-number">1.</span> <span class="toc-text">小声明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Q-amp-A"><span class="toc-number">2.</span> <span class="toc-text">Q&amp;A</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">3.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E4%BD%93%E6%80%9D%E8%B7%AF"><span class="toc-number">4.</span> <span class="toc-text">总体思路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E6%8D%B7%E5%BE%84%E6%8C%87%E4%BB%A4"><span class="toc-number">5.</span> <span class="toc-text">设置捷径指令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E5%AE%9A%E4%B8%80%E9%94%AE%E5%AF%BC%E8%88%AA"><span class="toc-number">5.1.</span> <span class="toc-text">设定一键导航</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E4%B8%8A%E7%8F%AD%E8%BF%98%E6%98%AF%E5%9B%9E%E5%AE%B6"><span class="toc-number">5.2.</span> <span class="toc-text">判断上班还是回家</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A4%E6%96%AD%E5%B7%A5%E4%BD%9C%E6%97%A5"><span class="toc-number">5.3.</span> <span class="toc-text">判断工作日</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E5%AE%9A%E8%87%AA%E5%8A%A8%E5%8C%96%E5%9C%BA%E6%99%AF"><span class="toc-number">5.4.</span> <span class="toc-text">设定自动化场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%84%E5%8A%A0%E5%86%85%E5%AE%B9"><span class="toc-number">5.5.</span> <span class="toc-text">附加内容</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/hexo/Hackintosh_LenovoM910X_8100B_RX460_OC/" title="1L小主机系列 - Lenovo M910X"><img src="/hexo/images/lenovo-thinkCentre-M910x-tiny-hero.webp" onerror="this.onerror=null;this.src='/hexo/img/404.jpg'" alt="1L小主机系列 - Lenovo M910X"/></a><div class="content"><a class="title" href="/hexo/Hackintosh_LenovoM910X_8100B_RX460_OC/" title="1L小主机系列 - Lenovo M910X">1L小主机系列 - Lenovo M910X</a><time datetime="2022-01-23T16:00:00.000Z" title="发表于 2022-01-24 00:00:00">2022-01-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/hexo/OpenwrtConfigurationRecord/" title="OpenWrt配置记录"><img src="/hexo/images/openwrt.webp" onerror="this.onerror=null;this.src='/hexo/img/404.jpg'" alt="OpenWrt配置记录"/></a><div class="content"><a class="title" href="/hexo/OpenwrtConfigurationRecord/" title="OpenWrt配置记录">OpenWrt配置记录</a><time datetime="2022-01-04T16:00:00.000Z" title="发表于 2022-01-05 00:00:00">2022-01-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/hexo/ThinItxCaseMK1/" title="复刻！赵总MK1，一个3D打印版的Thin-ITX机箱"><img src="/hexo/images/MK1VS.webp" onerror="this.onerror=null;this.src='/hexo/img/404.jpg'" alt="复刻！赵总MK1，一个3D打印版的Thin-ITX机箱"/></a><div class="content"><a class="title" href="/hexo/ThinItxCaseMK1/" title="复刻！赵总MK1，一个3D打印版的Thin-ITX机箱">复刻！赵总MK1，一个3D打印版的Thin-ITX机箱</a><time datetime="2021-12-15T16:00:00.000Z" title="发表于 2021-12-16 00:00:00">2021-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/hexo/Hackintosh_HP-800G1_I7-4770hq_OC/" title="1L小主机系列 - HP 800G1"><img src="/hexo/images/hp_800_g1.webp" onerror="this.onerror=null;this.src='/hexo/img/404.jpg'" alt="1L小主机系列 - HP 800G1"/></a><div class="content"><a class="title" href="/hexo/Hackintosh_HP-800G1_I7-4770hq_OC/" title="1L小主机系列 - HP 800G1">1L小主机系列 - HP 800G1</a><time datetime="2021-04-19T16:00:00.000Z" title="发表于 2021-04-20 00:00:00">2021-04-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/hexo/Hackintosh-AsusH110T-QNVH-I7-8850H-DW1820A-OC/" title="DIY Mac mini后续 - CPU更换至QNVH"><img src="/hexo/images/diy-mac-mini.webp" onerror="this.onerror=null;this.src='/hexo/img/404.jpg'" alt="DIY Mac mini后续 - CPU更换至QNVH"/></a><div class="content"><a class="title" href="/hexo/Hackintosh-AsusH110T-QNVH-I7-8850H-DW1820A-OC/" title="DIY Mac mini后续 - CPU更换至QNVH">DIY Mac mini后续 - CPU更换至QNVH</a><time datetime="2021-04-18T16:00:00.000Z" title="发表于 2021-04-19 00:00:00">2021-04-19</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Road</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="icp"><a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn/"><span>粤ICP备2021171477号</span></a><span class="footer-separator">|</span><a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44011202001879"><img class="icp-icon" src="https://s1.ax1x.com/2018/09/29/ilmwIH.png"/><span>粤公网安备44011202001879号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/hexo/js/utils.js"></script><script src="/hexo/js/main.js"></script><script src="/hexo/js/tw_cn.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
