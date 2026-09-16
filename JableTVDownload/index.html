@@ -1,0 +1,539 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>小工具分享：JableTVDownload下载器 | Road's Blog</title><meta name="author" content="Road"><meta name="copyright" content="Road"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一个基于python的Jable.tv 视频下载工具。工具在别人的项目基础上进行升级，添加WebUI 图形界面、下载队列管理、代理配置、Webhook API、浏览器 UA 配置等功能，可通过 Docker Compose 一键部署。"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "小工具分享：JableTVDownload下载器",
+  "url": "https://road-tech.github.io/hexo/JableTVDownload/",
+  "image": "https://road-tech.github.io/hexo/images/JableTVDownload.webp",
+  "datePublished": "2026-06-01T16:00:00.000Z",
+  "dateModified": "2026-06-01T16:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Road",
+      "url": "https://road-tech.github.io/hexo"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/hexo/images/favicon.ico"><link rel="canonical" href="https://road-tech.github.io/hexo/JableTVDownload/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//static.cloudflareinsights.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="manifest" href="/hexo/manifest.json"/><link rel="apple-touch-icon" sizes="180x180" href="/hexo/images/apple-touch-icon.png"/><link rel="icon" type="image/png" sizes="32x32" href="/hexo/images/pwaicons/32.png"/><link rel="icon" type="image/png" sizes="16x16" href="/hexo/images/pwaicons/16.png"/><link rel="mask-icon" href="/hexo/images/safari-pinned-tab.svg" color="#5bbad5"/><link rel="stylesheet" href="/hexo/css/index.css?v=5.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?cadc3d1d9d8d4f5e1106193b542ce22c";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script defer="defer" data-pjax="data-pjax" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon="{&quot;token&quot;: &quot;c998d5b325f24855a5247e5800c8fe75&quot;}"></script><script>const GLOBAL_CONFIG = {
+  root: '/hexo/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '小工具分享：JableTVDownload下载器',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="//at.alicdn.com/t/font_3163941_d9m4tbyt6mg.css"><meta name="generator" content="Hexo 5.4.2"><link rel="alternate" href="/hexo/atom.xml" title="Road's Blog" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/hexo/images/100.png" onerror="this.onerror=null;this.src='/hexo/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/hexo/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/hexo/tags/"><div class="headline">标签</div><div class="length-num">40</div></a><a href="/hexo/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/hexo/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/link/"><i class="fa-fw fab fa-apple"></i><span> Hackintosh</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/hexo/images/JableTVDownload.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/hexo/"><span class="site-name">Road's Blog</span></a><a class="nav-page-title" href="/hexo/"><span class="site-name">小工具分享：JableTVDownload下载器</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/hexo/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/link/"><i class="fa-fw fab fa-apple"></i><span> Hackintosh</span></a></div><div class="menus_item"><a class="site-page" href="/hexo/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">小工具分享：JableTVDownload下载器</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-06-01T16:00:00.000Z" title="发表于 2026-06-02 00:00:00">2026-06-02</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-06-01T16:00:00.000Z" title="更新于 2026-06-02 00:00:00">2026-06-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/hexo/categories/%E5%B7%A5%E5%85%B7%E5%88%86%E4%BA%AB/">工具分享</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/hexo/categories/%E5%B7%A5%E5%85%B7%E5%88%86%E4%BA%AB/%E4%B8%8B%E8%BD%BD%E5%99%A8/">下载器</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="JableTVDownload"><a href="#JableTVDownload" class="headerlink" title="JableTVDownload"></a>JableTVDownload</h1><p>该项目 fork 自 <a target="_blank" rel="noopener" href="https://github.com/hcjohn463">hcjohn463</a> 的 <a target="_blank" rel="noopener" href="https://github.com/hcjohn463/JableTVDownload">JableTVDownloader</a>，在原项目基础上增加了下载代理配置、下载队列、WebUI、浏览器 UA 配置、Webhook、防机器人认证检测等功能。</p>
+<p>另外基于Webhook功能，可以结合iOS系统的快捷指令，实现手机触发下载任务的功能。</p>
+<hr>
+<h2 id="🚀-快速开始（推荐）"><a href="#🚀-快速开始（推荐）" class="headerlink" title="🚀 快速开始（推荐）"></a>🚀 快速开始（推荐）</h2><p>使用 Docker Compose 一键启动完整的 Web UI + 下载器服务，适合家庭 NAS 或服务器部署。</p>
+<h3 id="前置要求"><a href="#前置要求" class="headerlink" title="前置要求"></a>前置要求</h3><ul>
+<li>安装 <a target="_blank" rel="noopener" href="https://docs.docker.com/engine/install/">Docker Engine</a></li>
+<li>安装 <a target="_blank" rel="noopener" href="https://docs.docker.com/compose/install/">Docker Compose</a></li>
+</ul>
+<h3 id="启动方式"><a href="#启动方式" class="headerlink" title="启动方式"></a>启动方式</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 克隆仓库</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/Road-tech/JableTVDownload.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 进入项目目录</span></span><br><span class="line"><span class="built_in">cd</span> JableTVDownload</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 复制完整配置文件</span></span><br><span class="line"><span class="built_in">cp</span> docker-compose.full.yml docker-compose.yml</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 编辑配置文件（可选，根据需要修改端口、下载目录等，具体说明见下文）</span></span><br><span class="line">vi docker-compose.yml</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 启动所有服务</span></span><br><span class="line">docker compose up -d</span><br></pre></td></tr></table></figure>
+
+<h3 id="🐳-docker-compose配置说明（docker-compose-full-yml）"><a href="#🐳-docker-compose配置说明（docker-compose-full-yml）" class="headerlink" title="🐳 docker-compose配置说明（docker-compose.full.yml）"></a>🐳 docker-compose配置说明（docker-compose.full.yml）</h3><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">webui:</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:8080&quot;</span>  <span class="comment"># Web UI 端口，可修改前面的数字</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">DOWNLOADER_API=http://downloader:5000</span>  <span class="comment"># 下载器 API 地址</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./logs:/logs</span>  <span class="comment"># 日志目录（任务记录 tasks.json）</span></span><br><span class="line">  </span><br><span class="line">  <span class="attr">downloader:</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;5000:5000&quot;</span>  <span class="comment"># API 端口，可修改前面的数字</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">SERVER=true</span>           <span class="comment"># 启用 Webhook 服务器</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">HOST=0.0.0.0</span>         <span class="comment"># 监听地址</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">PORT=5000</span>            <span class="comment"># 服务端口</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">LOG_DIR=/logs</span>        <span class="comment"># 日志目录</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./downloads:/downloads</span>                 <span class="comment"># 下载目录</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./downloader/config.json:/app/config.json</span>  <span class="comment"># 下载器配置文件，具体配置说明见下文</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./logs:/logs</span>         <span class="comment"># 日志目录</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">jable-network:</span></span><br><span class="line">    <span class="attr">driver:</span> <span class="string">bridge</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="📋-下载器配置文件-config-json"><a href="#📋-下载器配置文件-config-json" class="headerlink" title="📋 下载器配置文件 (config.json)"></a>📋 下载器配置文件 (config.json)</h3><p>可以看到上面的docker-compose.full.yml挂载了config.json，这个JSON配置文件管理下载器的常用设置，无需每次输入参数。当然你可以不用修改config.json，直接通过WebUI进行配置。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;proxy&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;enabled&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span>  <span class="comment">// 是否启用代理，默认 false</span></span><br><span class="line">        <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span>          <span class="comment">// 代理服务器地址，如: &quot;http://proxy:8080&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;browser&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;user_agent&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36&quot;</span><span class="punctuation">,</span>  <span class="comment">// 浏览器 User Agent</span></span><br><span class="line">        <span class="attr">&quot;headless&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span>       <span class="comment">// 是否使用无头模式（不显示浏览器窗口），默认 true</span></span><br><span class="line">        <span class="attr">&quot;disable_images&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span> <span class="comment">// 是否禁用图片加载（加快速度），默认 false</span></span><br><span class="line">        <span class="attr">&quot;page_load_timeout&quot;</span><span class="punctuation">:</span> <span class="number">30</span><span class="punctuation">,</span> <span class="comment">// 页面加载超时时间（秒），默认 30</span></span><br><span class="line">        <span class="attr">&quot;implicit_wait&quot;</span><span class="punctuation">:</span> <span class="number">10</span>     <span class="comment">// 隐式等待时间（秒），默认 10</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;download&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;cover&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span>  <span class="comment">// 是否下载视频封面，默认 true</span></span><br><span class="line">        <span class="attr">&quot;encode&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span> <span class="comment">// 是否使用 FFmpeg 转码优化，默认 true</span></span><br><span class="line">        <span class="attr">&quot;quality&quot;</span><span class="punctuation">:</span> <span class="number">1</span>    <span class="comment">// 转码质量 (1=最快, 2=适中, 3=最佳)，默认 1</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="🌐-浏览器访问WebUI"><a href="#🌐-浏览器访问WebUI" class="headerlink" title="🌐 浏览器访问WebUI"></a>🌐 浏览器访问WebUI</h3><p>启动成功后，通过浏览器访问WebUI：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://localhost:8080/">http://localhost:8080</a></li>
+</ul>
+<hr>
+<h2 id="📂-项目结构"><a href="#📂-项目结构" class="headerlink" title="📂 项目结构"></a>📂 项目结构</h2><figure class="highlight nix"><table><tr><td class="code"><pre><span class="line">JableTVDownload<span class="symbol">/</span></span><br><span class="line">├── docker-compose.full.yml  <span class="comment"># Docker Compose 完整配置模板</span></span><br><span class="line">├── README.md               <span class="comment"># 项目说明文档</span></span><br><span class="line">├── start.sh                <span class="comment"># Linux/Mac 启动脚本</span></span><br><span class="line">├── start.bat               <span class="comment"># Windows 启动脚本</span></span><br><span class="line">├── downloader<span class="symbol">/</span>             <span class="comment"># 下载器核心代码</span></span><br><span class="line">│   ├── Dockerfile          <span class="comment"># Downloader 镜像构建文件</span></span><br><span class="line">│   ├── config.json         <span class="comment"># 下载器配置文件</span></span><br><span class="line">│   ├── main.py             <span class="comment"># 主入口</span></span><br><span class="line">│   ├── crawler.py          <span class="comment"># 网页爬虫</span></span><br><span class="line">│   ├── download.py         <span class="comment"># 下载模块</span></span><br><span class="line">│   ├── merge.py            <span class="comment"># 视频合并</span></span><br><span class="line">│   ├── encode.py           <span class="comment"># 转码模块</span></span><br><span class="line">│   ├── cover.py            <span class="comment"># 封面下载</span></span><br><span class="line">│   ├── webhook_server.py   <span class="comment"># Webhook API 服务</span></span><br><span class="line">│   └── requirements.txt    <span class="comment"># Python 依赖</span></span><br><span class="line">├── webui<span class="symbol">/</span>                  <span class="comment"># Web UI 前端代码</span></span><br><span class="line">│   ├── Dockerfile.webui    <span class="comment"># Web UI 镜像构建文件</span></span><br><span class="line">│   ├── web_ui.py           <span class="comment"># Web UI 主程序</span></span><br><span class="line">│   ├── templates<span class="symbol">/</span>          <span class="comment"># HTML 模板</span></span><br><span class="line">│   └── requirements_webui.txt</span><br><span class="line">└── img<span class="symbol">/</span>                    <span class="comment"># 文档图片资源</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="项目功能"><a href="#项目功能" class="headerlink" title="项目功能"></a>项目功能</h2><h3 id="🎨-WebUI"><a href="#🎨-WebUI" class="headerlink" title="🎨 WebUI"></a>🎨 WebUI</h3><p>提供直观的网页界面（<a target="_blank" rel="noopener" href="https://htmlpreview.github.io/?https://github.com/Road-tech/JableTVDownload/blob/main/webui/templates/index.html">预览界面</a>），无需编写代码或使用终端即可使用所有功能，功能特性如下：</p>
+<h4 id="1-添加下载任务"><a href="#1-添加下载任务" class="headerlink" title="1. 添加下载任务"></a>1. 添加下载任务</h4><ul>
+<li>支持完整 URL（如：<code>https://jable.tv/videos/snxx-XXX/</code>）</li>
+<li>支持仅输入番号（如：<code>snxx-XXX</code>），系统自动补全</li>
+<li>支持批量添加（每行输入一个）</li>
+<li>任务自动加入下载队列</li>
+</ul>
+<h4 id="2-下载队列管理"><a href="#2-下载队列管理" class="headerlink" title="2. 下载队列管理"></a>2. 下载队列管理</h4><ul>
+<li>任务按添加顺序排队</li>
+<li>默认同时下载 1 个任务</li>
+<li>可配置同时下载数量（1-8）</li>
+</ul>
+<h4 id="3-实时监控"><a href="#3-实时监控" class="headerlink" title="3. 实时监控"></a>3. 实时监控</h4><ul>
+<li>下载任务列表</li>
+<li>实时日志输出</li>
+<li>下载进度条显示</li>
+</ul>
+<h4 id="4-配置管理"><a href="#4-配置管理" class="headerlink" title="4. 配置管理"></a>4. 配置管理</h4><ul>
+<li>代理设置（启用/停用、代理地址）</li>
+<li>浏览器设置（无头模式、禁用图片加载、自定义 UA）</li>
+<li>下载设置（封面下载、转码、转码质量）</li>
+</ul>
+<hr>
+<h3 id="🌐-Webhook-API-服务"><a href="#🌐-Webhook-API-服务" class="headerlink" title="🌐 Webhook API 服务"></a>🌐 Webhook API 服务</h3><p>支持通过 HTTP API 调用下载任务，方便与其他系统集成。</p>
+<h4 id="API-端点"><a href="#API-端点" class="headerlink" title="API 端点"></a>API 端点</h4><table>
+<thead>
+<tr>
+<th align="left">端点</th>
+<th align="left">方法</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>/health</code></td>
+<td align="left">GET</td>
+<td align="left">健康检查</td>
+</tr>
+<tr>
+<td align="left"><code>/api/download</code></td>
+<td align="left">POST</td>
+<td align="left">添加下载任务</td>
+</tr>
+<tr>
+<td align="left"><code>/api/download/batch</code></td>
+<td align="left">POST</td>
+<td align="left">批量添加下载任务</td>
+</tr>
+<tr>
+<td align="left"><code>/api/config</code></td>
+<td align="left">GET</td>
+<td align="left">获取当前配置</td>
+</tr>
+<tr>
+<td align="left"><code>/api/config</code></td>
+<td align="left">PUT/POST</td>
+<td align="left">更新配置</td>
+</tr>
+<tr>
+<td align="left"><code>/api/tasks</code></td>
+<td align="left">GET</td>
+<td align="left">获取下载任务列表</td>
+</tr>
+<tr>
+<td align="left"><code>/api/tasks/&lt;task_id&gt;</code></td>
+<td align="left">DELETE</td>
+<td align="left">删除指定任务</td>
+</tr>
+<tr>
+<td align="left"><code>/api/tasks/&lt;task_id&gt;/stop</code></td>
+<td align="left">POST</td>
+<td align="left">停止正在下载的任务</td>
+</tr>
+<tr>
+<td align="left"><code>/api/tasks</code></td>
+<td align="left">DELETE</td>
+<td align="left">清除已完成的任务</td>
+</tr>
+<tr>
+<td align="left"><code>/api/progress</code></td>
+<td align="left">GET</td>
+<td align="left">获取当前下载进度</td>
+</tr>
+<tr>
+<td align="left"><code>/api/queue/status</code></td>
+<td align="left">GET</td>
+<td align="left">获取队列状态</td>
+</tr>
+</tbody></table>
+<h4 id="API-使用示例"><a href="#API-使用示例" class="headerlink" title="API 使用示例"></a>API 使用示例</h4><h5 id="1-添加下载任务-1"><a href="#1-添加下载任务-1" class="headerlink" title="1. 添加下载任务"></a>1. 添加下载任务</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -X POST http://localhost:5000/api/download \</span><br><span class="line">  -H <span class="string">&quot;Content-Type: application/json&quot;</span> \</span><br><span class="line">  -d <span class="string">&#x27;&#123;&quot;url&quot;: &quot;https://jable.tv/videos/xxx/&quot;&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>可选参数：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://jable.tv/videos/xxx/&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;cover&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;encode&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;quality&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;proxy&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://proxy.example.com:8080&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="2-获取当前配置"><a href="#2-获取当前配置" class="headerlink" title="2. 获取当前配置"></a>2. 获取当前配置</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl http://localhost:5000/api/config</span><br></pre></td></tr></table></figure>
+
+<h5 id="3-更新配置"><a href="#3-更新配置" class="headerlink" title="3. 更新配置"></a>3. 更新配置</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -X PUT http://localhost:5000/api/config \</span><br><span class="line">  -H <span class="string">&quot;Content-Type: application/json&quot;</span> \</span><br><span class="line">  -d <span class="string">&#x27;&#123;</span></span><br><span class="line"><span class="string">    &quot;proxy&quot;: &#123;</span></span><br><span class="line"><span class="string">      &quot;enabled&quot;: true,</span></span><br><span class="line"><span class="string">      &quot;url&quot;: &quot;http://proxy.example.com:8080&quot;</span></span><br><span class="line"><span class="string">    &#125;,</span></span><br><span class="line"><span class="string">    &quot;download&quot;: &#123;</span></span><br><span class="line"><span class="string">      &quot;cover&quot;: false,</span></span><br><span class="line"><span class="string">      &quot;quality&quot;: 2</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">  &#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="4-查看下载任务"><a href="#4-查看下载任务" class="headerlink" title="4. 查看下载任务"></a>4. 查看下载任务</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 查看所有任务</span></span><br><span class="line">curl http://localhost:5000/api/tasks</span><br><span class="line"></span><br><span class="line"><span class="comment"># 筛选任务 (all/pending/downloading/completed/error)</span></span><br><span class="line">curl http://localhost:5000/api/tasks?status=downloading</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-停止下载任务"><a href="#5-停止下载任务" class="headerlink" title="5. 停止下载任务"></a>5. 停止下载任务</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -X POST http://localhost:5000/api/tasks/1/stop</span><br></pre></td></tr></table></figure>
+
+<h5 id="6-删除指定任务"><a href="#6-删除指定任务" class="headerlink" title="6. 删除指定任务"></a>6. 删除指定任务</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">curl -X DELETE http://localhost:5000/api/tasks/1</span><br></pre></td></tr></table></figure>
+
+<h5 id="7-清除已完成的任务"><a href="#7-清除已完成的任务" class="headerlink" title="7. 清除已完成的任务"></a>7. 清除已完成的任务</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 清除已完成和错误的任务</span></span><br><span class="line">curl -X DELETE http://localhost:5000/api/tasks?filter=completed</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清除所有任务</span></span><br><span class="line">curl -X DELETE http://localhost:5000/api/tasks?filter=all</span><br></pre></td></tr></table></figure>
+
+<h5 id="8-获取下载进度"><a href="#8-获取下载进度" class="headerlink" title="8. 获取下载进度"></a>8. 获取下载进度</h5><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 获取所有任务进度</span></span><br><span class="line">curl http://localhost:5000/api/progress</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取指定任务进度</span></span><br><span class="line">curl http://localhost:5000/api/progress?task_id=1</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="🐳-通过Docker的容器直接下载"><a href="#🐳-通过Docker的容器直接下载" class="headerlink" title="🐳 通过Docker的容器直接下载"></a>🐳 通过Docker的容器直接下载</h3><p>如果不喜欢WebUI的方式，也可以直接创建容器，把视频下载到指定目录。</p>
+<h4 id="交互模式"><a href="#交互模式" class="headerlink" title="交互模式"></a>交互模式</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 1. 构建镜像</span></span><br><span class="line">docker build -t jable-downloader .</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 运行（交互模式，下载视频存至本地 downloads 文件夹）</span></span><br><span class="line">docker run -it -v D:\downloads:/downloads jable-downloader</span><br></pre></td></tr></table></figure>
+
+<h4 id="基于配置文件直接下载视频"><a href="#基于配置文件直接下载视频" class="headerlink" title="基于配置文件直接下载视频"></a>基于配置文件直接下载视频</h4><p>将本地的 <code>config.json</code> 挂载到容器内：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -it \</span><br><span class="line">  -v ./downloads:/downloads \</span><br><span class="line">  -v ./config.json:/app/config.json \</span><br><span class="line">  -e URL=<span class="string">&quot;https://jable.tv/videos/xxx/&quot;</span> \</span><br><span class="line">  jable-downloader</span><br></pre></td></tr></table></figure>
+
+<h4 id="基于环境变量配置下载视频"><a href="#基于环境变量配置下载视频" class="headerlink" title="基于环境变量配置下载视频"></a>基于环境变量配置下载视频</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker run -it \</span><br><span class="line">  -v ./downloads:/downloads \</span><br><span class="line">  -v ./config.json:/app/config.json \</span><br><span class="line">  -e URL=<span class="string">&quot;https://jable.tv/videos/xxx/&quot;</span> \</span><br><span class="line">  -e PROXY=<span class="string">&quot;http://proxy.example.com:8080&quot;</span> \</span><br><span class="line">  -e ENABLE_PROXY=<span class="string">&quot;true&quot;</span> \</span><br><span class="line">  -e COVER=<span class="string">&quot;False&quot;</span> \</span><br><span class="line">  -e QUALITY=<span class="string">&quot;2&quot;</span> \</span><br><span class="line">  jable-downloader</span><br></pre></td></tr></table></figure>
+
+<h5 id="环境变量列表"><a href="#环境变量列表" class="headerlink" title="环境变量列表"></a>环境变量列表</h5><table>
+<thead>
+<tr>
+<th align="left">环境变量</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>SERVER</code></td>
+<td align="left">启动 Webhook 服务器 (true)</td>
+</tr>
+<tr>
+<td align="left"><code>HOST</code></td>
+<td align="left">服务器监听地址 (默认: 0.0.0.0)</td>
+</tr>
+<tr>
+<td align="left"><code>PORT</code></td>
+<td align="left">服务器端口 (默认: 5000)</td>
+</tr>
+<tr>
+<td align="left"><code>URL</code></td>
+<td align="left">视频网址</td>
+</tr>
+<tr>
+<td align="left"><code>RANDOM</code></td>
+<td align="left">下载随机热门视频 (true/false)</td>
+</tr>
+<tr>
+<td align="left"><code>ALL_URLS</code></td>
+<td align="left">演员页网址，下载所有视频</td>
+</tr>
+<tr>
+<td align="left"><code>CONFIG</code></td>
+<td align="left">自定义配置文件路径（容器内）</td>
+</tr>
+<tr>
+<td align="left"><code>PROXY</code></td>
+<td align="left">代理地址</td>
+</tr>
+<tr>
+<td align="left"><code>ENABLE_PROXY</code></td>
+<td align="left">启用代理 (true)</td>
+</tr>
+<tr>
+<td align="left"><code>DISABLE_PROXY</code></td>
+<td align="left">停用代理 (true)</td>
+</tr>
+<tr>
+<td align="left"><code>COVER</code></td>
+<td align="left">是否下载封面 (true/false)</td>
+</tr>
+<tr>
+<td align="left"><code>ENCODE</code></td>
+<td align="left">是否转码 (true/false)</td>
+</tr>
+<tr>
+<td align="left"><code>QUALITY</code></td>
+<td align="left">转码质量 (1/2/3)</td>
+</tr>
+</tbody></table>
+<hr>
+<h3 id="直接运行"><a href="#直接运行" class="headerlink" title="直接运行"></a>直接运行</h3><p>直接运行程序、不启动docker容器</p>
+<h4 id="⌨️-命令行参数"><a href="#⌨️-命令行参数" class="headerlink" title="⌨️ 命令行参数"></a>⌨️ 命令行参数</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python main.py -h</span><br><span class="line"></span><br><span class="line"><span class="comment"># Webhook 服务器模式</span></span><br><span class="line">python main.py --server                    <span class="comment"># 启动 Webhook 服务器</span></span><br><span class="line">python main.py --server --host 0.0.0.0 --port 5000  <span class="comment"># 自定义监听地址和端口</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载模式</span></span><br><span class="line">python main.py --random True       <span class="comment"># 下载随机热门视频</span></span><br><span class="line">python main.py --url &lt;网址&gt;         <span class="comment"># 直接指定 URL</span></span><br><span class="line">python main.py --all-urls &lt;演员页&gt;  <span class="comment"># 下载演员所有视频</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置文件相关</span></span><br><span class="line">python main.py --config my_config.json  <span class="comment"># 使用自定义配置文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 代理相关</span></span><br><span class="line">python main.py --enable-proxy                          <span class="comment"># 启用代理</span></span><br><span class="line">python main.py --disable-proxy                         <span class="comment"># 停用代理</span></span><br><span class="line">python main.py --proxy <span class="string">&quot;http://proxy.example.com:8080&quot;</span> <span class="comment"># 设置代理地址</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载选项</span></span><br><span class="line">python main.py --cover False  <span class="comment"># 不下载封面</span></span><br><span class="line">python main.py --encode False <span class="comment"># 不进行转码</span></span><br><span class="line">python main.py --quality 2    <span class="comment"># 设置转码质量 (1/2/3)</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="参数优先级"><a href="#参数优先级" class="headerlink" title="参数优先级"></a>参数优先级</h4><p>命令行参数优先级高于配置文件，例如：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 使用配置文件的代理设置，但关闭封面下载</span></span><br><span class="line">python main.py --url &lt;网址&gt; --cover False</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🛠️-维护命令"><a href="#🛠️-维护命令" class="headerlink" title="🛠️ 维护命令"></a>🛠️ 维护命令</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 停止所有服务</span></span><br><span class="line">docker compose down</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重新构建镜像</span></span><br><span class="line">docker compose build --no-cache</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启服务</span></span><br><span class="line">docker compose restart</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看实时日志</span></span><br><span class="line">docker compose logs -f webui</span><br><span class="line">docker compose logs -f downloader</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清理未使用的镜像</span></span><br><span class="line">docker image prune -f</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="📜-更新日志"><a href="#📜-更新日志" class="headerlink" title="📜 更新日志"></a>📜 更新日志</h2><table>
+<thead>
+<tr>
+<th align="left">版本</th>
+<th align="left">日期</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>v3.0</strong></td>
+<td align="left">2026/06/01</td>
+<td align="left">🌟 新增完整 Web UI 图形化界面</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">🎨 支持直接输入番号自动补全 URL</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">📊 实时显示任务进度和日志</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">⚙️ Web UI 配置管理功能</td>
+</tr>
+<tr>
+<td align="left"><strong>v2.3</strong></td>
+<td align="left">2026/05/30</td>
+<td align="left">🛡️ 新增浏览器配置项（UA、超时等）</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">🚫 新增机器人验证检测与提示功能</td>
+</tr>
+<tr>
+<td align="left"><strong>v2.2</strong></td>
+<td align="left">2026/05/30</td>
+<td align="left">🌐 新增 Webhook API 服务</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">📡 支持 HTTP API 新建下载任务、更新设置</td>
+</tr>
+<tr>
+<td align="left"><strong>v2.1</strong></td>
+<td align="left">2026/05/30</td>
+<td align="left">⚙️ 新增 <code>config.json</code> 配置文件系统</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">🚀 支持通过配置文件管理代理、封面下载、转码等选项</td>
+</tr>
+<tr>
+<td align="left"><strong>v2.0</strong></td>
+<td align="left">2026/03/15</td>
+<td align="left">🐳 支持 Docker 容器化部署</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">☸️ K8s（Job/PVC/ConfigMap）支持</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">📊 下载与合成加入 <code>tqdm</code> 实时进度条</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left">🚀 优化合成与转码速度</td>
+</tr>
+<tr>
+<td align="left"><strong>v1.11</strong></td>
+<td align="left">2023/04/19</td>
+<td align="left">🦕 新增 ffmpeg 自动转码</td>
+</tr>
+<tr>
+<td align="left"><strong>v1.10</strong></td>
+<td align="left">2023/04/19</td>
+<td align="left">🏹 兼容 Ubuntu Server</td>
+</tr>
+<tr>
+<td align="left"><strong>v1.9</strong></td>
+<td align="left">2023/04/15</td>
+<td align="left">🦅 下载演员所有相关视频</td>
+</tr>
+<tr>
+<td align="left"><strong>v1.8</strong></td>
+<td align="left">2022/01/25</td>
+<td align="left">🚗 下载结束后自动抓取封面</td>
+</tr>
+<tr>
+<td align="left"><strong>v1.7</strong></td>
+<td align="left">2021/06/04</td>
+<td align="left">🐶 更改 m3u8 获取方法（正则表达式）</td>
+</tr>
+<tr>
+<td align="left"><strong>v1.6</strong></td>
+<td align="left">2021/05/28</td>
+<td align="left">🌏 支持 Unix 系统（Mac、Linux 等）</td>
+</tr>
+<tr>
+<td align="left"><strong>v1.5</strong></td>
+<td align="left">2021/05/27</td>
+<td align="left">🍎 更新爬虫网页方法</td>
+</tr>
+<tr>
+<td align="left"><strong>v1.4</strong></td>
+<td align="left">2021/05/20</td>
+<td align="left">🌳 修改编码问题</td>
+</tr>
+<tr>
+<td align="left"><strong>v1.3</strong></td>
+<td align="left">2021/05/06</td>
+<td align="left">🌈 增加下载进度提示、修改 Crypto 问题</td>
+</tr>
+<tr>
+<td align="left"><strong>v1.2</strong></td>
+<td align="left">2021/05/05</td>
+<td align="left">⭐ 更新稳定版本</td>
+</tr>
+</tbody></table>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://road-tech.github.io/hexo">Road</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://road-tech.github.io/hexo/JableTVDownload/">https://road-tech.github.io/hexo/JableTVDownload/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://road-tech.github.io/hexo" target="_blank">Road's Blog</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/hexo/tags/Jable-tv/">Jable.tv</a><a class="post-meta__tags" href="/hexo/tags/%E4%B8%8B%E8%BD%BD%E5%99%A8/">下载器</a><a class="post-meta__tags" href="/hexo/tags/%E8%A7%86%E9%A2%91%E4%B8%8B%E8%BD%BD/">视频下载</a><a class="post-meta__tags" href="/hexo/tags/WebUI/">WebUI</a><a class="post-meta__tags" href="/hexo/tags/Docker/">Docker</a><a class="post-meta__tags" href="/hexo/tags/Python/">Python</a><a class="post-meta__tags" href="/hexo/tags/Webhook/">Webhook</a></div><div class="post-share"><div class="social-share" data-image="/hexo/images/JableTVDownload.webp" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/hexo/Hackintosh_LenovoM910X_8100B_RX460_OC/" title="1L小主机系列 - Lenovo M910X"><img class="cover" src="/hexo/images/lenovo-thinkCentre-M910x-tiny-hero.webp" onerror="onerror=null;src='/hexo/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">1L小主机系列 - Lenovo M910X</div></div><div class="info-2"><div class="info-item-1">省流助手，EFI下载链接： https://github.com/Road-tech/Hackintosh_LenovoM910X_8100B_RX460_OC 关于M910X联想的M910X（p320 tiny），一个非常好玩的1L迷你小主机。Q270的主板，双M.2插槽、一个PCIe扩展槽、双通道ddr4、6个USB，同时是最后一代可以刷bios上魔改U的联想小主机。再往上的M920x，P340都是双BIOS设计，无法刷bios了，也基本告别了便宜好玩的ES版CPU或者魔改U。 现在这台小主机性价比非常高，700出头的价格就买到这样的强悍扩展性，放在这个价位简直无敌的存在，而且可玩性非常高。这个价格换成300系芯片组的小主机，基本都没有双M.2接口（除了dell 7080mff 低压版），更别说PCIe扩展了。而他的下一代M920X，现在还要1300的价格，相比起来只多了个typc-C接口，不过原生可以上8代U，但只能支持正式版。M910x原配的显卡为RX460，现在咸鱼原厂全新只要600左右的价格。而M920x配套的rx560现在咸鱼要差不多1000，一个性能差不多的马甲卡...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/hexo/images/100.png" onerror="this.onerror=null;this.src='/hexo/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Road</div><div class="author-info-description">生活日常：好物、装机、diy、黑苹果、mini主机 | 这里是 @大马路叫Road 的个人博客，与你一起发现更大的世界</div><div class="site-data"><a href="/hexo/archives/"><div class="headline">文章</div><div class="length-num">14</div></a><a href="/hexo/tags/"><div class="headline">标签</div><div class="length-num">40</div></a><a href="/hexo/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Road-tech"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Road-tech" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="https://www.zhihu.com/people/ma-lu-58" target="_blank" title="Zhihu"><i class="fa-brands fa-zhihu"></i></a><a class="social-icon" href="http://weibo.com/superlulula" target="_blank" title="weibo"><i class="fab fa-weibo"></i></a><a class="social-icon" href="https://www.facebook.com/malu.tech" target="_blank" title="Facebook"><i class="fab fa-facebook-square"></i></a><a class="social-icon" href="https://www.linkedin.com/in/路-马-8ab580116" target="_blank" title="linkedin"><i class="fab fa-linkedin"></i></a><a class="social-icon" href="mailto:496814664@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">网站施工中</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JableTVDownload"><span class="toc-number">1.</span> <span class="toc-text">JableTVDownload</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%9A%80-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-number">1.1.</span> <span class="toc-text">🚀 快速开始（推荐）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E8%A6%81%E6%B1%82"><span class="toc-number">1.1.1.</span> <span class="toc-text">前置要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E5%8A%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.1.2.</span> <span class="toc-text">启动方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%B3-docker-compose%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E%EF%BC%88docker-compose-full-yml%EF%BC%89"><span class="toc-number">1.1.3.</span> <span class="toc-text">🐳 docker-compose配置说明（docker-compose.full.yml）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%8B-%E4%B8%8B%E8%BD%BD%E5%99%A8%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-config-json"><span class="toc-number">1.1.4.</span> <span class="toc-text">📋 下载器配置文件 (config.json)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8C%90-%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AEWebUI"><span class="toc-number">1.1.5.</span> <span class="toc-text">🌐 浏览器访问WebUI</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%82-%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.2.</span> <span class="toc-text">📂 项目结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E5%8A%9F%E8%83%BD"><span class="toc-number">1.3.</span> <span class="toc-text">项目功能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8E%A8-WebUI"><span class="toc-number">1.3.1.</span> <span class="toc-text">🎨 WebUI</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-%E6%B7%BB%E5%8A%A0%E4%B8%8B%E8%BD%BD%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">1. 添加下载任务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E4%B8%8B%E8%BD%BD%E9%98%9F%E5%88%97%E7%AE%A1%E7%90%86"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">2. 下载队列管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7"><span class="toc-number">1.3.1.3.</span> <span class="toc-text">3. 实时监控</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="toc-number">1.3.1.4.</span> <span class="toc-text">4. 配置管理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8C%90-Webhook-API-%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.3.2.</span> <span class="toc-text">🌐 Webhook API 服务</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#API-%E7%AB%AF%E7%82%B9"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">API 端点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#API-%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">API 使用示例</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-%E6%B7%BB%E5%8A%A0%E4%B8%8B%E8%BD%BD%E4%BB%BB%E5%8A%A1-1"><span class="toc-number">1.3.2.2.1.</span> <span class="toc-text">1. 添加下载任务</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-%E8%8E%B7%E5%8F%96%E5%BD%93%E5%89%8D%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.2.2.2.</span> <span class="toc-text">2. 获取当前配置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-%E6%9B%B4%E6%96%B0%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.2.2.3.</span> <span class="toc-text">3. 更新配置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4-%E6%9F%A5%E7%9C%8B%E4%B8%8B%E8%BD%BD%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.3.2.2.4.</span> <span class="toc-text">4. 查看下载任务</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#5-%E5%81%9C%E6%AD%A2%E4%B8%8B%E8%BD%BD%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.3.2.2.5.</span> <span class="toc-text">5. 停止下载任务</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#6-%E5%88%A0%E9%99%A4%E6%8C%87%E5%AE%9A%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.3.2.2.6.</span> <span class="toc-text">6. 删除指定任务</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#7-%E6%B8%85%E9%99%A4%E5%B7%B2%E5%AE%8C%E6%88%90%E7%9A%84%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.3.2.2.7.</span> <span class="toc-text">7. 清除已完成的任务</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#8-%E8%8E%B7%E5%8F%96%E4%B8%8B%E8%BD%BD%E8%BF%9B%E5%BA%A6"><span class="toc-number">1.3.2.2.8.</span> <span class="toc-text">8. 获取下载进度</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%90%B3-%E9%80%9A%E8%BF%87Docker%E7%9A%84%E5%AE%B9%E5%99%A8%E7%9B%B4%E6%8E%A5%E4%B8%8B%E8%BD%BD"><span class="toc-number">1.3.3.</span> <span class="toc-text">🐳 通过Docker的容器直接下载</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%A4%E4%BA%92%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">交互模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9B%B4%E6%8E%A5%E4%B8%8B%E8%BD%BD%E8%A7%86%E9%A2%91"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">基于配置文件直接下载视频</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE%E4%B8%8B%E8%BD%BD%E8%A7%86%E9%A2%91"><span class="toc-number">1.3.3.3.</span> <span class="toc-text">基于环境变量配置下载视频</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E5%88%97%E8%A1%A8"><span class="toc-number">1.3.3.3.1.</span> <span class="toc-text">环境变量列表</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B4%E6%8E%A5%E8%BF%90%E8%A1%8C"><span class="toc-number">1.3.4.</span> <span class="toc-text">直接运行</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%8C%A8%EF%B8%8F-%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">⌨️ 命令行参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-number">1.3.4.2.</span> <span class="toc-text">参数优先级</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%9B%A0%EF%B8%8F-%E7%BB%B4%E6%8A%A4%E5%91%BD%E4%BB%A4"><span class="toc-number">1.4.</span> <span class="toc-text">🛠️ 维护命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%9C-%E6%9B%B4%E6%96%B0%E6%97%A5%E5%BF%97"><span class="toc-number">1.5.</span> <span class="toc-text">📜 更新日志</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/hexo/JableTVDownload/" title="小工具分享：JableTVDownload下载器"><img src="/hexo/images/JableTVDownload.webp" onerror="this.onerror=null;this.src='/hexo/img/404.jpg'" alt="小工具分享：JableTVDownload下载器"/></a><div class="content"><a class="title" href="/hexo/JableTVDownload/" title="小工具分享：JableTVDownload下载器">小工具分享：JableTVDownload下载器</a><time datetime="2026-06-01T16:00:00.000Z" title="发表于 2026-06-02 00:00:00">2026-06-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/hexo/Hackintosh_LenovoM910X_8100B_RX460_OC/" title="1L小主机系列 - Lenovo M910X"><img src="/hexo/images/lenovo-thinkCentre-M910x-tiny-hero.webp" onerror="this.onerror=null;this.src='/hexo/img/404.jpg'" alt="1L小主机系列 - Lenovo M910X"/></a><div class="content"><a class="title" href="/hexo/Hackintosh_LenovoM910X_8100B_RX460_OC/" title="1L小主机系列 - Lenovo M910X">1L小主机系列 - Lenovo M910X</a><time datetime="2022-01-23T16:00:00.000Z" title="发表于 2022-01-24 00:00:00">2022-01-24</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/hexo/OpenwrtConfigurationRecord/" title="OpenWrt配置记录"><img src="/hexo/images/openwrt.webp" onerror="this.onerror=null;this.src='/hexo/img/404.jpg'" alt="OpenWrt配置记录"/></a><div class="content"><a class="title" href="/hexo/OpenwrtConfigurationRecord/" title="OpenWrt配置记录">OpenWrt配置记录</a><time datetime="2022-01-04T16:00:00.000Z" title="发表于 2022-01-05 00:00:00">2022-01-05</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/hexo/ThinItxCaseMK1/" title="复刻！赵总MK1，一个3D打印版的Thin-ITX机箱"><img src="/hexo/images/MK1VS.webp" onerror="this.onerror=null;this.src='/hexo/img/404.jpg'" alt="复刻！赵总MK1，一个3D打印版的Thin-ITX机箱"/></a><div class="content"><a class="title" href="/hexo/ThinItxCaseMK1/" title="复刻！赵总MK1，一个3D打印版的Thin-ITX机箱">复刻！赵总MK1，一个3D打印版的Thin-ITX机箱</a><time datetime="2021-12-15T16:00:00.000Z" title="发表于 2021-12-16 00:00:00">2021-12-16</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/hexo/Hackintosh_HP-800G1_I7-4770hq_OC/" title="1L小主机系列 - HP 800G1"><img src="/hexo/images/hp_800_g1.webp" onerror="this.onerror=null;this.src='/hexo/img/404.jpg'" alt="1L小主机系列 - HP 800G1"/></a><div class="content"><a class="title" href="/hexo/Hackintosh_HP-800G1_I7-4770hq_OC/" title="1L小主机系列 - HP 800G1">1L小主机系列 - HP 800G1</a><time datetime="2021-04-19T16:00:00.000Z" title="发表于 2021-04-20 00:00:00">2021-04-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By Road</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="icp"><a target="_blank" rel="noopener" href="http://www.beian.miit.gov.cn/"><span>粤ICP备2021171477号</span></a><span class="footer-separator">|</span><a target="_blank" rel="noopener" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=44011202001879"><img class="icp-icon" src="https://s1.ax1x.com/2018/09/29/ilmwIH.png"/><span>粤公网安备44011202001879号</span></a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/hexo/js/utils.js?v=5.7.0"></script><script src="/hexo/js/main.js?v=5.7.0"></script><script src="/hexo/js/tw_cn.js?v=5.7.0"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
